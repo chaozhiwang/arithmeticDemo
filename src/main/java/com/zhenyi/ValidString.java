@@ -1,5 +1,7 @@
 package com.zhenyi;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 /**
  * 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串，判断字符串是否有效。
@@ -25,21 +27,35 @@ import java.util.Stack;
  */
 public class ValidString {
     public boolean isValid(String s) {
-        Stack<String> stack = new Stack<String>();
-        return  false;
+        Stack<Character> stack = new Stack<Character>();
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("{}","{}");
+        map.put("[]","[]");
+        map.put("()","()");
+        char[] ch = s.toCharArray();
+        for (int i = 0; i < s.length(); i++) {
+            if(stack.isEmpty()) {
+                stack.push(ch[i]);
+                continue;
+            }
+            String temp = stack.peek().toString()+ch[i]+"";
+            if(map.containsKey(temp)) {
+                stack.pop();
+            }else{
+                stack.push(ch[i]);
+            }
+        }
+        return  stack.isEmpty();
     }
 
     public static void main(String[] args) {
-        Stack<String> stack = new Stack<String>();
-        System.out.println(stack);
-        stack.push("1");
-        System.out.println(stack);
-        stack.push("22");
-        stack.push("hello");
-        System.out.println(stack);
-       // stack.pop();
-        System.out.println(stack);
-        System.out.println(stack.peek());
-        System.out.println(stack);
+        ValidString valid = new ValidString();
+        String str = "{{{}}}";
+        long start = System.currentTimeMillis();
+
+        System.out.println(valid.isValid(str));
+        long end = System.currentTimeMillis();
+        System.out.println(end - start);
+
     }
 }
